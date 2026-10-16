@@ -1,0 +1,8 @@
+{
+  "name": "FINAL - EDUNEXA AI GIAO BÀI \u0026 CHẤM BÀI 1.0",
+  "description": "Nền tảng giao bài, trộn 10 mã đề chuẩn ma trận và chấm bài tự động thông minh dành cho giáo viên và học sinh Việt Nam.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

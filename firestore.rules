@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Teacher Settings
+    match /teacher_settings/{teacherId} {
+      allow read: if true;
+      allow write: if isSignedIn() || teacherId == 'teacher_default_edunexa';
+    }
+
+    // Classes
+    match /classes/{classId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.resource.data.teacherId == 'teacher_default_edunexa' || (resource != null && resource.data.teacherId == 'teacher_default_edunexa');
+    }
+
+    // Matrices
+    match /matrices/{matrixId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.resource.data.teacherId == 'teacher_default_edunexa' || (resource != null && resource.data.teacherId == 'teacher_default_edunexa');
+    }
+
+    // Exams
+    match /exams/{examId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.resource.data.teacherId == 'teacher_default_edunexa' || (resource != null && resource.data.teacherId == 'teacher_default_edunexa');
+    }
+
+    // Assignments
+    match /assignments/{assignmentId} {
+      allow read: if true;
+      allow write: if isSignedIn() || request.resource.data.teacherId == 'teacher_default_edunexa' || (resource != null && resource.data.teacherId == 'teacher_default_edunexa');
+    }
+
+    // Submissions
+    match /submissions/{submissionId} {
+      allow create: if request.resource.data.id == submissionId && request.resource.data.receiptCode is string;
+      allow get: if true;
+      allow list: if true;
+      allow update, delete: if true;
+    }
+
+    // Textbooks
+    match /textbooks/{textbookId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

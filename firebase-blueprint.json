@@ -1,0 +1,160 @@
+{
+  "entities": {
+    "TeacherSetting": {
+      "title": "TeacherSetting",
+      "description": "Cấu hình giáo viên, trường học và kết nối Google Sheets",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "teacherName": { "type": "string", "maxLength": 128 },
+        "schoolName": { "type": "string", "maxLength": 128 },
+        "sheetsSpreadsheetId": { "type": "string", "maxLength": 256 },
+        "autoSyncSheets": { "type": "boolean" },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["teacherId", "teacherName", "schoolName"]
+    },
+    "Class": {
+      "title": "Class",
+      "description": "Lớp học và danh sách học sinh quản lý",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 64 },
+        "grade": { "type": "string", "maxLength": 32 },
+        "subject": { "type": "string", "maxLength": 64 },
+        "studentCount": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "teacherId", "name", "grade"]
+    },
+    "Matrix": {
+      "title": "Matrix",
+      "description": "Ma trận đề thi theo chủ đề và mức độ nhận thức",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 256 },
+        "subject": { "type": "string", "maxLength": 64 },
+        "grade": { "type": "string", "maxLength": 32 },
+        "curriculum": { "type": "string", "maxLength": 64 },
+        "examType": { "type": "string", "maxLength": 64 },
+        "duration": { "type": "number" },
+        "totalScore": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "isApproved": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "teacherId", "title", "subject", "grade", "totalScore", "totalQuestions", "isApproved"]
+    },
+    "Exam": {
+      "title": "Exam",
+      "description": "Đề thi hoàn chỉnh được tạo từ ma trận và nguồn học liệu",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "matrixId": { "type": "string", "maxLength": 64 },
+        "title": { "type": "string", "maxLength": 256 },
+        "subject": { "type": "string", "maxLength": 64 },
+        "grade": { "type": "string", "maxLength": 32 },
+        "duration": { "type": "number" },
+        "totalScore": { "type": "number" },
+        "isApproved": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["draft", "approved", "published"] },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "teacherId", "title", "subject", "grade", "isApproved", "status"]
+    },
+    "Assignment": {
+      "title": "Assignment",
+      "description": "Đợt giao bài tập/thi cho các lớp với 1 hoặc 10 phiên bản mã đề",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "teacherId": { "type": "string", "maxLength": 128 },
+        "examId": { "type": "string", "maxLength": 64 },
+        "title": { "type": "string", "maxLength": 256 },
+        "subject": { "type": "string", "maxLength": 64 },
+        "duration": { "type": "number" },
+        "allowManualClass": { "type": "boolean" },
+        "maxAttempts": { "type": "number" },
+        "showScoreMode": { "type": "string", "enum": ["immediate", "after_close", "manual"] },
+        "status": { "type": "string", "enum": ["active", "closed"] },
+        "totalVariants": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "teacherId", "examId", "title", "status"]
+    },
+    "Submission": {
+      "title": "Submission",
+      "description": "Bài nộp của học sinh, kết quả chấm trắc nghiệm và điểm tự luận",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "assignmentId": { "type": "string", "maxLength": 64 },
+        "variantId": { "type": "string", "maxLength": 64 },
+        "variantCode": { "type": "string", "maxLength": 32 },
+        "studentName": { "type": "string", "maxLength": 128 },
+        "studentDob": { "type": "string", "maxLength": 32 },
+        "className": { "type": "string", "maxLength": 64 },
+        "receiptCode": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["submitted", "graded", "needs_teacher_grading"] },
+        "multipleChoiceScore": { "type": "number" },
+        "essayScore": { "type": "number" },
+        "totalScore": { "type": "number" },
+        "submittedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "assignmentId", "studentName", "studentDob", "className", "receiptCode", "status"]
+    },
+    "TextbookPdf": {
+      "title": "TextbookPdf",
+      "description": "File sách giáo khoa và học liệu PDF số hóa",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "title": { "type": "string", "maxLength": 256 },
+        "subject": { "type": "string", "maxLength": 64 },
+        "grade": { "type": "string", "maxLength": 32 },
+        "curriculum": { "type": "string", "maxLength": 64 },
+        "fileName": { "type": "string", "maxLength": 256 },
+        "fileSize": { "type": "number" },
+        "fileUrl": { "type": "string" },
+        "uploadedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "title", "subject", "grade"]
+    }
+  },
+  "firestore": {
+    "/teacher_settings/{teacherId}": {
+      "schema": { "$ref": "#/entities/TeacherSetting" },
+      "description": "Cấu hình riêng của giáo viên"
+    },
+    "/classes/{classId}": {
+      "schema": { "$ref": "#/entities/Class" },
+      "description": "Danh sách các lớp học của giáo viên"
+    },
+    "/matrices/{matrixId}": {
+      "schema": { "$ref": "#/entities/Matrix" },
+      "description": "Các bản ma trận đề thi"
+    },
+    "/exams/{examId}": {
+      "schema": { "$ref": "#/entities/Exam" },
+      "description": "Kho đề thi"
+    },
+    "/assignments/{assignmentId}": {
+      "schema": { "$ref": "#/entities/Assignment" },
+      "description": "Các đợt giao bài thi"
+    },
+    "/submissions/{submissionId}": {
+      "schema": { "$ref": "#/entities/Submission" },
+      "description": "Bài làm và kết quả của học sinh"
+    },
+    "/textbooks/{textbookId}": {
+      "schema": { "$ref": "#/entities/TextbookPdf" },
+      "description": "Kho sách giáo khoa và tài liệu học liệu"
+    }
+  }
+}
